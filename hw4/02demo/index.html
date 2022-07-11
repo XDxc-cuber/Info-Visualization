@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Graph Creator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="extend/cssmenu/cssmenu.css" />
+    <link href="extend/jquery/jquery-ui.css" rel="stylesheet" media="screen">
+    <link href="extend/jquery/jquery-style.css" rel="stylesheet" media="screen">
+
+    <script src="extend/jquery/jquery-1.12.1.js"></script>
+    <script src="extend/jquery/jquery-ui.js"></script>
+    <script src="extend/common/FileSaver.js"></script>
+
+    <script src="lib/GCommonFuncUtility.js"></script>
+    <script src="lib/CommonFuncUtility.js"></script>
+    <script src="lib/CommonDefine.js"></script>
+    <script src="lib/MsgManager.js"></script>
+    <script src="lib/MenuEvent.js"></script>
+    <script src="lib/GraphGeneratorManager.js"></script>
+    <script src="lib/UIFunc.js"></script>
+
+    <script src="extend/d3/d3.min.js"></script>
+    <script src="extend/cssmenu/cssmenu.js"></script>
+    <script src="extend/common/spin.js"></script>
+    <script src="extend/community/jLouvain.js"></script>
+</head>
+<body>
+
+<div id='cssmenu'></div>
+<div id="container"></div>
+
+<script>
+
+    var msgMgr = new MsgManager();
+    var graphGentorMgr = new GraphGeneratorManager();
+    
+    //0. Layout
+    $( "#container" ).load( "layout/main.html", function(){
+        $( "#cssmenu" ).load( "layout/menu.html", function(){
+            init();
+            running();
+        } );
+    } );
+
+    //1. Init
+    function init(){
+
+        // Init Menu
+        $("#cssmenu").menumaker({
+            title: "SMG",
+            format: "multitoggle"
+        });
+
+        UIFunc();
+
+        // Init Other
+        msgMgr.init();
+
+        //
+        graphGentorMgr.init("main_container");
+    }
+
+    //2. Update
+    function running()
+    {
+        requestAnimationFrame( running );
+        msgMgr.run();
+    }
+
+</script>
+    
+</body>
+</html>

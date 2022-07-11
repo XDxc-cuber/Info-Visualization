@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Anim</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="extend/d3/d3.min.js"></script>
+    <script src="lib/CommonDefine.js"></script>
+</head>
+<div id="main_container"></div>
+<body>
+<script>
+
+    var svgWidth = 1280;
+    var svgHeihgt = 720;
+    var scaleFactor = 1;
+    var gSvg = d3.select("#main_container").append("svg")
+            .attr("width", svgWidth)
+            .attr("height", svgHeihgt)
+            .append("g")
+            .attr("transform", "translate(200,200)");
+
+    // gSvg.append("rect")
+    //         .attr("width", svgWidth)
+    //         .attr("height", svgHeihgt);
+
+    var node_d3 = gSvg.selectAll(".node");
+    var link_d3 = gSvg.selectAll(".link");
+
+    doSmoothTran( "data/pattern_graph_1.json", "data/pattern_graph_0.json", false );
+    //doSmoothTran( "data/pattern_graph_empty.json", "data/pattern_graph_0.json", true );
+
+    function doSmoothTran( patSrc, patTar, isSmall ){
+        d3.text(patSrc, function(data1) {
+            var input_data1 = eval( "(" + data1 + ")" );
+
+            if ( isSmall ) {
+                doLoadGraphSeqSmall( input_data1, 0.24 );
+            }else{
+                    doLoadGraphSeq( input_data1, scaleFactor );
+                    d3.text(patTar, function(data0) {
+                    var input_data0 = eval( "(" + data0 + ")" );
+                    node_d3.transition()
+                        .duration(3000)
+                        .attr("opacity", function(d, i){
+                            return input_data0.nodes[i].vis;
+                        });
+
+                    link_d3.transition()
+                        .duration(3000)
+                        .attr("stroke-opacity", function(d, i) { 
+                            //if ( input_data0.nodes[d.source].vis == 0 || input_data0.nodes[d.target].vis == 0 )
+                            if ( input_data0.links[i].vis == 0 ) 
+                            {
+                                return 0.0;
+                            }else{
+                                return 1.0;
+                            };
+                    });
+                });
+            }
+
+
+        });
+    }
+
+    function doLoadGraphSeq(input_data, scale) {
+
+        if ( input_data != undefined ) {
+
+            node_d3 = gSvg.selectAll(".node");
+            link_d3 = gSvg.selectAll(".link");
+
+            link_d3 = link_d3.data(input_data.links);
+            link_d3.enter().append("line", ".node")
+                .attr("class", "link")
+                .attr("stroke-width", function(d) { return 1.0; })
+                .attr("stroke-opacity", function(d) { 
+                    if ( d.vis == 0 ) {
+                        return 0.0;
+                    }else{
+                        return 1.0;
+                    };
+                })
+                .attr("x1", function(d){return input_data.nodes[d.source].x * scale * 4;})
+                .attr("y1", function(d){return input_data.nodes[d.source].y * scale * 4;})
+                .attr("x2", function(d){return input_data.nodes[d.target].x * scale * 4;})
+                .attr("y2", function(d){return input_data.nodes[d.target].y * scale * 4;});
+
+            node_d3 = node_d3.data(input_data.nodes);
+            node_d3.enter().append("circle", ".cursor")
+                .attr("class", "node")
+                .attr("opacity", function(d){
+                    return d.vis;
+                })
+                .attr("cx", function(d){return d.x * scale * 4;})
+                .attr("cy", function(d){return d.y * scale * 4;})
+                .style("fill", function(d){
+                    if( d.size > 1.0 )
+                        return "#3399ff";
+                    else
+                        return "#66b2ff";
+                })
+                //.attr("px", function(d){return d.px;})
+                //.attr("py", function(d){return d.py;})
+                .attr("r", function(d){
+                    return 6*d.size*scale;
+                });
+        }
+    }
+
+    function doLoadGraphSeqSmall(input_data, scale) {
+
+        if ( input_data != undefined ) {
+
+            var node_d3_small = gSvg.selectAll(".nodesmall");
+            var link_d3_small = gSvg.selectAll(".linksmall");
+
+            link_d3_small = link_d3_small.data(input_data.links);
+            link_d3_small.enter().append("line", ".node")
+                .attr("class", "linksmall")
+                .attr("stroke-width", function(d) { return 1.0; })
+                .attr("stroke-opacity", function(d) { 
+                    if ( d.vis == 0 ) {
+                        return 0.0;
+                    }else{
+                        return 1.0;
+                    };
+                })
+                .attr("x1", function(d){return input_data.nodes[d.source].x * scale * 4;})
+                .attr("y1", function(d){return input_data.nodes[d.source].y * scale * 4;})
+                .attr("x2", function(d){return input_data.nodes[d.target].x * scale * 4;})
+                .attr("y2", function(d){return input_data.nodes[d.target].y * scale * 4;});
+
+            node_d3_small = node_d3_small.data(input_data.nodes);
+            node_d3_small.enter().append("circle", ".cursor")
+                .attr("class", "nodesmall")
+                .attr("opacity", function(d){
+                    return d.vis;
+                })
+                .attr("cx", function(d){return d.x * scale * 4;})
+                .attr("cy", function(d){return d.y * scale * 4;})
+                .style("fill", function(d){
+                    return "#ffffff";
+                })
+                //.attr("px", function(d){return d.px;})
+                //.attr("py", function(d){return d.py;})
+                .attr("r", function(d){
+                    return 6*d.size*scale;
+                });
+        }
+    }
+</script>
+</body>
+</html>

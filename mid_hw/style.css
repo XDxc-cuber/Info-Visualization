@@ -1,0 +1,25 @@
+#preview-photo{
+	border: 1px solid #ccc;
+	height: 200px;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+body{
+	background: url("https://ts1.cn.mm.bing.net/th/id/R-C.3cbbb58d60dbab7e7503b3053c292587?rik=wn1iwQM9Q1z8zA&riu=http%3a%2f%2fwww.51pptmoban.com%2fd%2ffile%2f2017%2f08%2f15%2fd101564c0da10294cfecb721d7cf31de.jpg&ehk=Vo3BjoSOPJlKVKv94RXek16b4Pr7nYtUc4Ns4QA8kl8%3d&risl=&pid=ImgRaw&r=0") no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+main{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+canvas{
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+	margin: 20px;
+}

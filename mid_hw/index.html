@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html>
+<link rel="stylesheet" type="text/css" href="style.css" />
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="codes/jquery-ui.css">
+	<title>An Interesting Web</title>
+</head>
+<script src="codes/jquery-1.12.4.js"></script>
+<script src="codes/jquery-ui.js"></script>
+<script src="codes/echarts.min.js"></script>
+<script src="codes/K_means.js"></script>
+
+<body class="myBody">
+    <h1 align="center">这是一个神奇的图片交互网页</h1>
+    <h1 align="center">Try it!</h1>
+
+    <main>
+        <p>请上传一张图片</p>
+        <input id="imageUpload" type="file" name="file" accept="image/gif, image/jpeg, image/png, image/jpg">
+        <p>像素点聚类的个数k</p>
+        <input id="k" type="text" name="k"/>
+        <form id="chartForm" method="post" action="">
+            <br> 结果的呈现样式 <br />
+            <input type="radio" name="chart" value="pie"/>饼图
+            <input type="radio" name="chart" value="bar"/>柱状图
+        </form>
+        <button class="ui-button ui-widget ui-corner-all" id="start">查看结果</button>
+        <p>图片预览：</p>
+        <canvas id="myCanvas"></canvas>
+        <div id="showChart" style="width:1000px;height:500px;"></div>
+        <script src = 'codes/index.js'></script>
+    </main>
+</body>
+
+</html>

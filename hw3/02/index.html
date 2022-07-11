@@ -1,0 +1,77 @@
+<!DOCTYPE html> 
+<html style='height: 100%'>    
+<head>        
+    <meta charset='utf-8'>    
+</head>    
+<body style='height: 100%; margin: 0'>        
+    <div id='container' style='height: 100%'></div>        
+    <script type='text/javascript' src='echarts.min.js'></script>        
+    <script type='text/javascript' src='echarts-gl.min.js'></script>        
+    <script type='text/javascript' src='ecStat.min.js'></script>        
+    <script type='text/javascript' src='dataTool.min.js'></script> 
+    <script src="d3.v3.min.js"></script>
+    <script type="text/javascript">
+
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+
+
+// 实践课3-练习2：
+// 1. 载入AQI数据，并用散点图呈现
+// 2. 将各空气质量（AQI）值映射到 [0, 100]之间
+// 3. 处理后的数据用散点图显示，AQI的值用散点大小体现
+
+d3.csv("02-AQIData.csv", function(data) {
+    let len = data.length;
+    var airData = new Array(len);
+    var scale = 100, bias = 5;
+    var minAQI = Infinity, maxAQI = -1, minLan = Infinity, minLng = Infinity;
+
+    for(let i = 0; i < len; i++)
+    {
+        let lng = parseFloat(data[i].lng), lan = parseFloat(data[i].lan), aqi = parseInt(data[i].aqi);
+        airData[i] = [lng, lan, aqi];
+
+        minLng = lng < minLng ? lng : minLng;
+        minLan = lan < minLan ? lan : minLan;
+        minAQI = aqi < minAQI ? aqi : minAQI;
+        maxAQI = aqi > maxAQI ? aqi : maxAQI;
+    }
+    minLng -= bias;
+    minLan -= bias;
+    for(let i = 0; i < len; i++)
+    {
+        airData[i][0] -= minLng;
+        airData[i][1] -= minLan;
+    }
+
+    console.log("Done.");
+    setGraph(airData, scale, minAQI, maxAQI);
+});
+
+function setGraph(graphData, scale, minAQI, maxAQI)
+{
+    option = {
+        xAxis: {
+            name: '经度'
+        },
+        yAxis: {
+            name: "纬度"
+        },
+        series: [{
+            symbolSize: function(val) {
+                return parseInt((val[2] - minAQI) / (maxAQI - minAQI) * scale);
+            },
+            data: graphData,
+            type: 'scatter'
+        }]
+    };
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+}
+       </script>
+   </body>
+</html>

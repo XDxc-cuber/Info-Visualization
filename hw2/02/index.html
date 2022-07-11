@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>DataVis_Practice_02</title>
+</head>
+<body>
+
+<!-- 载入D3库 -->
+<script src="d3.v3.min.js"></script>
+
+<!-- 
+	一个画布
+	画布相关代码参考：https://www.w3school.com.cn/html5/html_5_canvas.asp
+-->
+<canvas id="myCanvas" width="690" height="457" style="border:1px solid #c3c3c3;">
+Your browser does not support the canvas element.
+</canvas>
+
+<script type="text/javascript">
+
+	// 练习1文件操作示例代码
+	d3.csv("01-AQIData.csv", function(data) {
+		//此文件载入操作是异步，以下代码在文件完全载入后触发
+		
+	});
+
+	// 练习2载入图片示例代码
+	var img = new Image();
+	img.src = 'images/01.jpg';
+	img.onload=function(){
+		var context = document.getElementById('myCanvas').getContext('2d');
+		context.drawImage(img, 0, 0);
+
+		// data中保存了图片所有像素的颜色信息，每个像素的RGBA信息占数组中4位
+		// RGBA为像素的红色、绿色、蓝色、透明度四个分量
+		var data = context.getImageData(0, 0, 690, 457).data;
+		
+	};
+
+</script>
+
+</body>
+</html>
